@@ -513,6 +513,184 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Mobile Navigation Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Modal Functions
+        function openJobModal() {
+            document.getElementById('jobModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeJobModal() {
+            document.getElementById('jobModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function openScholarshipModal() {
+            document.getElementById('scholarshipModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeScholarshipModal() {
+            document.getElementById('scholarshipModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const jobModal = document.getElementById('jobModal');
+            const scholarshipModal = document.getElementById('scholarshipModal');
+            const successModal = document.getElementById('successModal');
+            
+            if (event.target === jobModal) {
+                closeJobModal();
+            }
+            if (event.target === scholarshipModal) {
+                closeScholarshipModal();
+            }
+            if (event.target === successModal) {
+                closeSuccessModal();
+            }
+        }
+
+        // FAQ Toggle
+        document.querySelectorAll('.faq-question').forEach(item => {
+            item.addEventListener('click', () => {
+                const faqItem = item.parentElement;
+                const answer = faqItem.querySelector('.faq-answer');
+                const icon = item.querySelector('i');
+                
+                faqItem.classList.toggle('active');
+                answer.style.maxHeight = faqItem.classList.contains('active') ? answer.scrollHeight + 'px' : '0';
+                icon.style.transform = faqItem.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
+            });
+        });
+
+        // Form Submission Handlers
+        document.getElementById('jobForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Simulate API call to your backend
+                // Replace with your actual endpoint: await fetch('/api/job-apply', { method: 'POST', body: formData });
+                
+                // For demo - simulate network delay
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                closeJobModal();
+                document.getElementById('successModal').style.display = 'flex';
+                
+            } catch (error) {
+                alert('Error submitting application. Please try again.');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        document.getElementById('scholarshipForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Simulate API call to your backend
+                // Replace with your actual endpoint: await fetch('/api/scholarship-apply', { method: 'POST', body: formData });
+                
+                // For demo - simulate network delay
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                closeScholarshipModal();
+                document.getElementById('successModal').style.display = 'flex';
+                
+            } catch (error) {
+                alert('Error submitting application. Please try again.');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('navbar-scrolled');
+            } else {
+                navbar.classList.remove('navbar-scrolled');
+            }
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all glass cards and sections
+        document.querySelectorAll('.glass-card, .service-card, .benefit, .why-item, .info-card, .req-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Set current year for any dynamic content
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add any additional initialization here
+        });
+    </script>
 </body>
 </html>
